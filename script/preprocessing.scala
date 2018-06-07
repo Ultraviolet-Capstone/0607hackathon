@@ -35,7 +35,7 @@ println("after  read  :: " + System.currentTimeMillis())
 
 
 println("before  mapping  :: " + System.currentTimeMillis())
-val DTG_GPS = data.map(line => line.split("\\|")).map(arr => (Array(arr(2), arr(3), arr(4)).mkString("_"), List(arr(13).toInt/1000000.0, arr(12).toInt/1000000.0), arr(21))) 
+val DTG_GPS = data.map(line => line.split("\\|")).filter(arr => arr(18) == "11").map(arr => (Array(arr(2), arr(3), arr(4)).mkString("_"), List(arr(13).toInt/1000000.0, arr(12).toInt/1000000.0), arr(21))) 
 println("after  mapping  :: "+ System.currentTimeMillis())
 
 
