@@ -35,9 +35,9 @@ println("after  read  :: " + System.currentTimeMillis())
 
 
 println("before  mapping  :: " + System.currentTimeMillis())
-val DTG_GPS = data.map(line => line.split("\\|")).filter(arr => arr(18) == "11")
+val DTG_GPS = data.map(line => line.split("\\|")).filter(arr => arr(18) == "11").map(arr => arr.mkString(","))
 
-DTG_GPS.saveAsTextFile(resultDir+"seoul")
+DTG_GPS.saveAsTextFile(resultDir+"seoul-"+now)
 
 //
 //
