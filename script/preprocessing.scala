@@ -35,39 +35,49 @@ println("after  read  :: " + System.currentTimeMillis())
 
 
 println("before  mapping  :: " + System.currentTimeMillis())
-val DTG_GPS = data.map(line => line.split("\\|")).filter(arr => arr(18) == "11").map(arr => (Array(arr(2), arr(3), arr(4)).mkString("_"), List(arr(13).toInt/1000000.0, arr(12).toInt/1000000.0), arr(21))) 
-println("after  mapping  :: "+ System.currentTimeMillis())
+val DTG_GPS = data.map(line => line.split("\\|")).filter(arr => arr(18) == "11")
 
+DTG_GPS.saveAsTextFile(resultDir+"seoul")
 
-println("before  filter :: "+ System.currentTimeMillis())
-try {
-  for (line <- Source.fromFile(sourceDir + sourceFileName).getLines()) {
-    var partial = line.split(",")
-    var location = List(partial(13).toDouble, partial(14).toDouble)
-    println("we are now doing : " + partial(0))
-    var result = DTG_GPS.filter(gps => isInCircle(location, gps._2))
-    if (result.count() > 0)
-      result.saveAsTextFile(resultDir + now + "/" + partial(0).replace(" ","_"))
-  }
-} catch {
-  case ex: Exception => println(ex)
-}
-println("after  filter :: "+ System.currentTimeMillis())
-
-
-
-// test loop data
-// when in real it should be made by reading file
-// val loopArr = Array(
-//   List(37.535242, 127.134268),
-//   List(37.535339, 127.133792), 
-//   List(36.745939, 128.021290) 
-//   );
 //
 //
 //
-// for (location <- loopArr) {
-//   var result = DTG_GPS.filter(gps => isInCircle(location, gps._2))
-//   result.saveAsTextFile("./result/" + location.mkString("_"))
+//   .map(arr => (Array(arr(2), arr(3), arr(4)).mkString("_"), List(arr(13).toInt/1000000.0, arr(12).toInt/1000000.0), arr(21))) 
+// println("after  mapping  :: "+ System.currentTimeMillis())
+//
+//
+//
+//
+//
+// println("before  filter :: "+ System.currentTimeMillis())
+// try {
+//   for (line <- Source.fromFile(sourceDir + sourceFileName).getLines()) {
+//     var partial = line.split(",")
+//     var location = List(partial(13).toDouble, partial(14).toDouble)
+//     println("we are now doing : " + partial(0))
+//     var result = DTG_GPS.filter(gps => isInCircle(location, gps._2))
+//     if (result.count() > 0)
+//       result.saveAsTextFile(resultDir + now + "/" + partial(0).replace(" ","_"))
+//   }
+// } catch {
+//   case ex: Exception => println(ex)
 // }
+// println("after  filter :: "+ System.currentTimeMillis())
 //
+//
+//
+// // test loop data
+// // when in real it should be made by reading file
+// // val loopArr = Array(
+// //   List(37.535242, 127.134268),
+// //   List(37.535339, 127.133792), 
+// //   List(36.745939, 128.021290) 
+// //   );
+// //
+// //
+// //
+// // for (location <- loopArr) {
+// //   var result = DTG_GPS.filter(gps => isInCircle(location, gps._2))
+// //   result.saveAsTextFile("./result/" + location.mkString("_"))
+// // }
+// //
