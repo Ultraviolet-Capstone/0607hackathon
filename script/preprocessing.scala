@@ -27,23 +27,32 @@ def isInCircle (gps: List[Double], origin: List[Double]): Boolean = {
 val sourceFileName = "frequencyAccident.csv"
 val resultDir = "result/"
 val sourceDir = "source/"
-val data = sc.textFile(sourceDir+"DTG/*.gz", '\n') 
-
 val now = System.currentTimeMillis();
 
+println("before  read  :: " + System.currentTimeMillis())
+val data = sc.textFile(sourceDir+"1/part-r-*.gz", '\n') 
+println("after  read  :: " + System.currentTimeMillis())
+
+
+println("before  mapping  :: " + System.currentTimeMillis())
 val DTG_GPS = data.map(line => line.split("\\|")).map(arr => (Array(arr(2), arr(3), arr(4)).mkString("_"), List(arr(13).toInt/1000000.0, arr(12).toInt/1000000.0), arr(21))) 
+println("after  mapping  :: "+ System.currentTimeMillis())
 
 
+println("before  filter :: "+ System.currentTimeMillis())
 try {
   for (line <- Source.fromFile(sourceDir + sourceFileName).getLines()) {
     var partial = line.split(",")
     var location = List(partial(13).toDouble, partial(14).toDouble)
+    println("we are now doing : " + partial(0))
     var result = DTG_GPS.filter(gps => isInCircle(location, gps._2))
-    result.saveAsTextFile(resultDir + now + "/" + location.mkString("_"))
+    if (result.count() > 0)
+      result.saveAsTextFile(resultDir + now + "/" + partial(0).replace(" ","_"))
   }
 } catch {
   case ex: Exception => println(ex)
 }
+println("after  filter :: "+ System.currentTimeMillis())
 
 
 

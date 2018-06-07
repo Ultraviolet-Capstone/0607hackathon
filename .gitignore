@@ -1,3 +1,5 @@
 result/*/
 data/*
+*.tar
+*.gz
 !.tmp
